@@ -1,61 +1,58 @@
 # ⚡ Energy Consumption Prediction & Peak Optimization
 
-Live App • Machine Learning • Energy Systems
+Machine Learning • Energy Systems • Optimization
 
 ---
 
 ## 🚀 Overview
 
-This project applies machine learning to predict building energy consumption and reduce peak demand through optimization strategies.
+This project applies machine learning to predict building energy consumption and reduce peak demand through a simple yet effective optimization strategy.
 
 ---
 
 ## 💼 Why This Matters
 
-Energy systems face major challenges:
+Energy systems face critical challenges:
 
 - High peak demand increases operational costs  
 - Inefficient energy usage leads to waste  
-- Grid stress impacts reliability  
+- Load imbalance stresses infrastructure  
 
-Machine learning enables:
-
-- Accurate demand forecasting  
-- Smarter energy usage  
-- Reduced peak loads  
+Machine learning enables smarter energy management by forecasting demand and optimizing usage.
 
 ---
 
-## 🏭 Use Case
+## 🎯 Objective
 
-Applicable to:
-
-- Smart buildings  
-- Energy management systems  
-- Industrial facilities  
-- Grid demand optimization  
+- Predict hourly energy consumption  
+- Reduce peak demand using optimization techniques  
 
 ---
 
-## 🎯 Key Results
+## 🧠 Approach
 
-- Built a full ML pipeline (data → model → optimization)  
-- Predicted hourly energy consumption with **RMSE ≈ 3.5**  
-- Reduced peak demand by **~14%**  
-- Improved load distribution across time  
+- Generated hourly building dataset (temperature, occupancy)  
+- Trained a **Random Forest Regressor**  
+- Evaluated performance using RMSE (**≈ 3.5**)  
+- Implemented a **peak-shaving strategy**  
+- Compared energy usage before and after optimization  
 
 ---
 
-## 📊 Model Performance
+## 📊 Results
 
+- Accurate energy consumption prediction  
+- Peak demand reduced by **~14%**  
+- Improved load distribution over time  
+
+---
+
+## 📸 Visual Results
+
+### Model Performance
 ![Energy Prediction](outputs/model.png)
 
----
-
-## ⚡ Optimization Impact
-
-Peak Demand Reduction  
-
+### Optimization Impact
 ![Optimization Impact](outputs/optimization.png)
 
 ---
@@ -71,13 +68,12 @@ Peak Demand Reduction
 
 ---
 
-## 🛠 Features
+## 🛠 Tech Stack
 
-- Energy consumption prediction model  
-- Peak demand optimization strategy  
-- Visualization of consumption trends  
-- End-to-end ML pipeline  
-- Real-world inspired energy use case  
+- Python  
+- Pandas  
+- Scikit-learn  
+- Matplotlib  
 
 ---
 
@@ -128,6 +124,7 @@ Improve optimization strategies
 ## 💡 Key Insight
 
 Predicting energy consumption is useful.
+
 👉 Optimizing it is where the real value lies.
 
 ---
