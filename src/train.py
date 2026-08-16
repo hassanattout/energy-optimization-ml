@@ -1,42 +1,63 @@
-import pandas as pd
+from pathlib import Path
+
 import joblib
 import matplotlib.pyplot as plt
 import numpy as np
-
+import pandas as pd
 from sklearn.ensemble import RandomForestRegressor
-from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error
 
-df = pd.read_csv("data/data.csv")
+ROOT = Path(__file__).resolve().parents[1]
+DATA_PATH = ROOT / "data" / "data.csv"
+MODEL_PATH = ROOT / "models" / "model.pkl"
+OUTPUT_PATH = ROOT / "outputs" / "model.png"
+FEATURES = ["hour", "temp", "occupancy"]
 
-X = df[["hour","temp","occupancy"]]
-y = df["energy"]
 
-X_train, X_test, y_train, y_test = train_test_split(X,y,test_size=0.2)
+def train_model(data_path: Path = DATA_PATH) -> float:
+    """Train with a chronological holdout and return holdout RMSE."""
+    df = pd.read_csv(data_path).sort_values("timestamp")
+    split_index = int(len(df) * 0.8)
+    train_df = df.iloc[:split_index]
+    test_df = df.iloc[split_index:]
 
-model = RandomForestRegressor()
-model.fit(X_train, y_train)
+    model = RandomForestRegressor(
+        n_estimators=200,
+        random_state=42,
+        n_jobs=-1,
+    )
+    model.fit(train_df[FEATURES], train_df["energy"])
+    predictions = model.predict(test_df[FEATURES])
+    rmse = float(
+        np.sqrt(mean_squared_error(test_df["energy"], predictions))
+    )
 
-pred = model.predict(X_test)
+    MODEL_PATH.parent.mkdir(parents=True, exist_ok=True)
+    OUTPUT_PATH.parent.mkdir(parents=True, exist_ok=True)
+    joblib.dump(model, MODEL_PATH)
 
-rmse = np.sqrt(mean_squared_error(y_test, pred))
-print("RMSE:", rmse)
+    plt.figure(figsize=(7, 5))
+    plt.scatter(test_df["energy"], predictions, alpha=0.3)
+    maximum = max(test_df["energy"].max(), predictions.max())
+    plt.plot([0, maximum], [0, maximum], "--")
+    plt.title("Chronological holdout: predicted vs actual")
+    plt.xlabel("Actual energy")
+    plt.ylabel("Predicted energy")
+    plt.text(
+        test_df["energy"].min(),
+        test_df["energy"].max() * 0.9,
+        f"RMSE: {rmse:.2f}",
+    )
+    plt.tight_layout()
+    plt.savefig(OUTPUT_PATH, dpi=160)
+    plt.close()
+    return rmse
 
-# plot
-plt.scatter(y_test, pred, alpha=0.3)
-m = max(y_test.max(), pred.max())
-plt.plot([0,m],[0,m],'--')
 
-plt.title("Predicted vs Actual Energy Consumption (Model Performance)")
+def main() -> None:
+    rmse = train_model()
+    print(f"Chronological holdout RMSE: {rmse:.2f}")
 
-# add RMSE on plot
-plt.text(
-    min(y_test),
-    max(y_test)*0.9,
-    f"RMSE: {rmse:.2f}",
-)
-plt.xlabel("Actual")
-plt.ylabel("Predicted")
 
-plt.savefig("outputs/model.png")
-joblib.dump(model, "models/model.pkl")
+if __name__ == "__main__":
+    main()
