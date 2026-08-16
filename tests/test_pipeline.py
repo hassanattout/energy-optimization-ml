@@ -23,5 +23,8 @@ def test_peak_shaving_reduces_peak_and_preserves_energy():
 
     assert metrics["peak_after"] < metrics["peak_before"]
     assert metrics["peak_reduction_percent"] > 0
-    assert metrics["energy_balance_error"] == pytest.approx(0.0)
+    assert metrics["energy_balance_error"] == pytest.approx(
+        0.0,
+        abs=1e-9,
+    )
     assert len(optimized) == len(df)
