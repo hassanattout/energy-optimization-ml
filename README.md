@@ -1,136 +1,96 @@
-# ⚡ Energy Consumption Prediction & Peak Optimization
+# Energy Consumption Forecasting and Peak Shaving
 
-Machine Learning • Energy Systems • Optimization
+A reproducible educational pipeline that generates synthetic building-load data, trains a Random Forest forecasting model, and applies an energy-conserving peak-shaving heuristic.
 
----
+> This is a simulation project, not a production energy-management system. Its results are based on synthetic data and should not be interpreted as measured savings from a real building.
 
-## 🚀 Overview
+## What the project demonstrates
 
-This project applies machine learning to predict building energy consumption and reduce peak demand through a simple yet effective optimization strategy.
+- Reproducible synthetic time-series generation
+- Chronological train/test evaluation
+- Random Forest energy-consumption forecasting
+- Load shifting from peak to off-peak periods
+- Energy-balance verification
+- Automated tests and continuous integration
 
----
+## Method
 
-## 💼 Why This Matters
+The synthetic dataset contains hourly temperature, occupancy and energy consumption over 120 days. The first 80% of observations are used for training and the final 20% form a chronological holdout.
 
-Energy systems face critical challenges:
+The peak-shaving stage is a transparent heuristic:
 
-- High peak demand increases operational costs  
-- Inefficient energy usage leads to waste  
-- Load imbalance stresses infrastructure  
+1. Identify consumption above the 85th percentile.
+2. Reduce those peak observations by 15%.
+3. Redistribute the removed energy across off-peak observations.
+4. Verify that total energy is preserved.
 
-Machine learning enables smarter energy management by forecasting demand and optimizing usage.
+This is load shifting, not energy elimination or a mathematically optimal control policy.
 
----
-
-## 🎯 Objective
-
-- Predict hourly energy consumption  
-- Reduce peak demand using optimization techniques  
-
----
-
-## 🧠 Approach
-
-- Generated hourly building dataset (temperature, occupancy)  
-- Trained a **Random Forest Regressor**  
-- Evaluated performance using RMSE (**≈ 3.5**)  
-- Implemented a **peak-shaving strategy**  
-- Compared energy usage before and after optimization  
-
----
-
-## 📊 Results
-
-- Accurate energy consumption prediction  
-- Peak demand reduced by **~14%**  
-- Improved load distribution over time  
-
----
-
-## 📸 Visual Results
-
-### Model Performance
-![Energy Prediction](outputs/model.png)
-
-### Optimization Impact
-![Optimization Impact](outputs/optimization.png)
-
----
-
-## 🧠 Methodology
-
-- Generated hourly energy dataset (temperature, occupancy)  
-- Performed feature engineering  
-- Trained a Random Forest Regressor  
-- Evaluated performance using RMSE  
-- Applied peak-shaving optimization strategy  
-- Compared results before and after optimization  
-
----
-
-## 🛠 Tech Stack
-
-- Python  
-- Pandas  
-- Scikit-learn  
-- Matplotlib  
-
----
-
-## 🧪 How to Run
-
-### 1. Clone the repository
+## Run locally
 
 ```bash
 git clone https://github.com/hassanattout/energy-optimization-ml.git
 cd energy-optimization-ml
-```
-
-### 2. Install dependencies
-```bash
+python -m venv .venv
+source .venv/bin/activate
 pip install -r requirements.txt
+python src/main.py
 ```
 
-### 3. Run the project
+Run the tests with:
+
 ```bash
-python3 src/main.py
+pytest -q
 ```
 
----
+The pipeline regenerates:
 
-## 🗂️ Repository Structure
+- `data/data.csv`
+- `models/model.pkl`
+- `outputs/model.png`
+- `outputs/optimization.png`
+
+## Results
+
+The exact forecasting RMSE and peak reduction are printed when the pipeline runs. A fixed random seed and chronological split make the experiment reproducible.
+
+![Forecast evaluation](outputs/model.png)
+
+![Peak-shaving result](outputs/optimization.png)
+
+## Repository structure
+
 ```text
-energy-optimization-ml/
-│
-├── data/               # Dataset
-├── models/             # Trained models
-├── outputs/            # Results & visualizations
-├── src/                # Source code
-│
-├── README.md
+.
+├── .github/workflows/ci.yml
+├── data/
+├── models/
+├── outputs/
+├── src/
+│   ├── generate_data.py
+│   ├── main.py
+│   ├── optimize.py
+│   └── train.py
+├── tests/test_pipeline.py
+├── requirements.txt
+└── README.md
 ```
 
----
+## Limitations and next steps
 
-## 📌 Future Improvements
+- Replace synthetic observations with an open building-energy dataset.
+- Add lagged and calendar features without future-data leakage.
+- Compare against naive and linear baselines.
+- Report MAE, RMSE and confidence intervals.
+- Formulate optimization with equipment limits, tariffs and comfort constraints.
+- Evaluate peak demand and cost savings on unseen periods.
 
-Use real-world datasets
-Implement time-series models (LSTM, XGBoost)
-Add real-time dashboard (Streamlit)
-Improve optimization strategies
-
----
-
-## 💡 Key Insight
-
-Predicting energy consumption is useful.
-
-👉 Optimizing it is where the real value lies.
-
----
-
-## 👨‍💻 Author
+## Author
 
 Hassan Attout  
-Machine Learning & Energy Systems  
-LinkedIn: https://www.linkedin.com/in/hassanattout
+Mechanical engineer focused on energy systems and applied AI  
+[LinkedIn](https://www.linkedin.com/in/hassanattout)
+
+## License
+
+MIT
